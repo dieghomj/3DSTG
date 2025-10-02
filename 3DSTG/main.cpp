@@ -11,6 +11,8 @@ const float DT = 0.016f;          // 60FPS
 const float WORLD_X = 500.0f;
 const float WORLD_Y = 350.0f;
 
+float angle = 0.0f;
+
 void changeSize(int w, int h)
 {
     // Prevent a divide by zero, when window is too short
@@ -37,14 +39,25 @@ void changeSize(int w, int h)
 
 void render()
 {
+    //Clear Color and Depth Buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ 
+    //Reset transformations
+    glLoadIdentity();
+    //Set the camera
+    gluLookAt(  0.f, 0.f, 20.f,
+                0.f, 0.f, 0.f,
+                0.f, 1.f, 0.f);
+    glRotatef(angle, 0.f, 1.f, 0.f);
 
-    glColor3f(1.f, 0.f, 0.f);
     glBegin(GL_TRIANGLES);
     glVertex3f(-2, -2, -5.0);
     glVertex3f(2, 0.0, -5.0);
     glVertex3f(0.0, 2, -5.0);
     glEnd();
+
+    angle += 0.1f;
+    
     glutSwapBuffers();
 }
 
@@ -57,6 +70,7 @@ int main(int argc, char** argv) {
     glClearColor(0, 0, 0, 0);
     glutDisplayFunc(render);
     glutReshapeFunc(changeSize);
+    glutIdleFunc(render);
     glutMainLoop();
     return 0;
 }
